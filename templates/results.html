@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Analysis Results</title>
+</head>
+<body>
+    <h1>Text Analysis Results</h1>
+    <h2>Most Frequent Words</h2>
+    <img src="data:image/png;base64,{{ freq_words_plot }}" alt="Most Frequent Words">
+
+    <h2>Readability Scores</h2>
+    <ul>
+        {% for score, value in readability_scores.items() %}
+        <li>{{ score }}: {{ value }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Sentiment Analysis</h2>
+    <img src="data:image/png;base64,{{ sentiment_plot }}" alt="Sentiment Analysis">
+</body>
+</html>
