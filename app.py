@@ -10,14 +10,20 @@ import textstat
 from nltk import pos_tag, word_tokenize
 from textblob import TextBlob
 import spacy
+import string
 
 app = Flask(__name__)
 
 # Helper functions (use the code you've provided)
 
 def nltk_extract(content):
-    words = word_tokenize(content)
+    # Remove punctuation and split into words
+    words = word_tokenize(content.lower())
+    words = [word for word in words if word not in string.punctuation]
+    
+    # Get part-of-speech tags
     pos_tags = pos_tag(words)
+    
     return words, pos_tags
 
 def analyze_readability(content):
@@ -80,7 +86,8 @@ def plot_sentiment(polarity, subjectivity):
     plt.close(fig)
     return plot_data
 
-def plot_most_frequent_words(content, num_words=10):
+
+def plot_most_frequent_words(content, num_words=25):
     filler_words = {'in', 'the', 'and', 'of', 'to', 'a', 'is', 'that', 'it', 'on', 'for', 'with', 'as', 'was', 'at', 'by', 'an', 'be', 'this', 'which', 'or', 'from', 'but', 'not', 'are', 'have', 'had', 'has', 'were', 'they', 'their', 'you', 'we', 'he', 'she', 'his', 'her', 'them', 'us', 'our', 'my', 'me', 'i'}
     words, _ = nltk_extract(content)
     filtered_words = [word for word in words if word not in filler_words]
@@ -124,14 +131,15 @@ def index():
         if doc_id:
             content = get_document_content(doc_id)
             if content:
-                freq_words_plot = plot_most_frequent_words(content, num_words=10)
+                freq_words_plot = plot_most_frequent_words(content, num_words=25)
                 readability_scores = analyze_readability(content)
                 polarity, subjectivity = analyze_chunks(content)
                 sentiment_plot = plot_sentiment(polarity, subjectivity)
                 return render_template('results.html', 
                                        freq_words_plot=freq_words_plot, 
                                        readability_scores=readability_scores, 
-                                       sentiment_plot=sentiment_plot)
+                                       sentiment_plot=sentiment_plot,
+                                       full_text=content)
     return render_template('index.html')
 
 if __name__ == '__main__':

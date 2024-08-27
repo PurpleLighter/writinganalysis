@@ -19,5 +19,14 @@
 
     <h2>Sentiment Analysis</h2>
     <img src="data:image/png;base64,{{ sentiment_plot }}" alt="Sentiment Analysis">
+
+    <h2>Full Text</h2>
+
+    <button id="play-btn">Play</button>
+    <button id="pause-btn">Pause</button>
+
+    <p id="full-text">{{ full_text | safe }}</p>
+
+    <script src="{{ url_for('static', filename='tts_script.js') }}"></script>
 </body>
 </html>
